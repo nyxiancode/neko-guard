@@ -20,15 +20,15 @@ Bot = Client(
 
 @Bot.on_message(filters.private & filters.command("start"))
 async def start(bot, update):
-    await update.reply("""Hi there! I'm the Telegram Group Guardian bot. I'm here to help you keep your group clean and safe for everyone. Here are the main features I offer:
+    await update.reply("""Hai, yang di sana! Saya adalah bot Penjaga Grup Telegram. Saya di sini untuk membantu Anda menjaga grup Anda tetap bersih dan aman untuk semua orang. Berikut adalah fitur utama yang saya tawarkan:
 
-• **Word Slagging:** I can detect and remove inappropriate language messages in your group. 
+• **Word Slagging:** Saya dapat mendeteksi dan menghapus pesan bahasa yang tidak pantas di grup Anda.
 
-• **Image Filtering:** I can also automatically detect and remove pornographic or NSFW images in your group. 
+• **Image Filtering:** Saya juga dapat secara otomatis mendeteksi dan menghapus gambar porno atau NSFW di grup Anda.
 
-To get started, simply add me to your Telegram group and promote me to admin 
+Untuk memulai, cukup tambahkan saya ke grup Telegram Anda dan promosikan saya ke admin
 
-Thanks for using Telegram Group Guardian! Let's keep your group safe and respectful. Powered by @NACBOTS""")
+Terima kasih telah menggunakan Telegram Group Guardian! Mari jaga grup Anda tetap aman dan terhormat. Powered by @SayaNeko""")
 
 #-----------------------------------------------------------------
 
