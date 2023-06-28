@@ -28,7 +28,7 @@ async def start(bot, update):
 
 Untuk memulai, cukup tambahkan saya ke grup Telegram Anda dan promosikan saya ke admin
 
-Terima kasih telah menggunakan Telegram Group Guardian! Mari jaga grup Anda tetap aman dan terhormat. Powered by @SayaNeko""")
+Terima kasih telah menggunakan Neko Guardian! Mari jaga grup Anda tetap aman dan terhormat. Powered by @SayaNeko""")
 
 #-----------------------------------------------------------------
 
