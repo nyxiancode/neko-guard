@@ -4,7 +4,6 @@ import re
 import config
 
 url = "https://api.safone.me/nsfw"
-SPOILER = config.SPOILER_MODE
 slangf = 'slang_words.txt'
 with open(slangf, 'r') as f:
     slang_words = set(line.strip().lower() for line in f)
@@ -18,15 +17,15 @@ Bot = Client(
 
 @Bot.on_message(filters.private & filters.command("start"))
 async def start(bot, update):
-    await update.reply("""Hai, yang di sana! Saya adalah bot Penjaga Grup Telegram. Saya di sini untuk membantu Anda menjaga grup Anda tetap bersih dan aman untuk semua orang. Berikut adalah fitur utama yang saya tawarkan:
-    
-    • **Word Slagging:** Saya dapat mendeteksi dan menghapus pesan bahasa yang tidak pantas di grup Anda.
-    
-    • **Image Filtering:** Saya juga dapat secara otomatis mendeteksi dan menghapus gambar porno atau NSFW di grup Anda.
-    
-    Untuk memulai, cukup tambahkan saya ke grup Telegram Anda dan promosikan saya ke admin
-    
-    Terima kasih telah menggunakan Neko Guardian! Mari jaga grup Anda tetap aman dan terhormat. Powered by @SayaNeko""")
+    await update.reply("""Halo! Saya adalah bot Penjaga Grup Telegram. Saya hadir untuk membantu Anda menjaga grup Anda tetap bersih dan aman untuk semua orang. Berikut ini adalah fitur utama yang saya tawarkan:
+
+• **Word Slagging:** Saya dapat mendeteksi dan menghapus pesan dengan bahasa yang tidak pantas di dalam grup Anda.
+
+• **Image Filtering:** Saya juga dapat secara otomatis mendeteksi dan menghapus gambar porno atau NSFW di dalam grup Anda.
+
+Untuk memulai, cukup tambahkan saya ke grup Telegram Anda dan jadikan saya admin.
+
+Terima kasih telah menggunakan Telegram Group Guardian! Mari kita jaga agar grup Anda tetap aman dan tertib. Powered by @SayaNeko""")
 
 @Bot.on_message(filters.group & filters.photo)
 async def image(bot, message):
@@ -42,12 +41,11 @@ async def image(bot, message):
         if nsfw:
             name = message.from_user.first_name
             await message.delete()
-            if SPOILER:
-                await message.reply_photo(x, caption=f"""**WARNING ⚠️** (nude photo)
-    
-    **{name}** sent a nude photo
-    
-    {porn}% porn""", has_spoiler=True)
+            await message.reply_photo(x, caption=f"""**PERINGATAN ⚠️** (foto telanjang)
+
+**{name}** telah mengirim foto telanjang
+
+{porn}% pornografi""")
 
 @Bot.on_message(filters.group & filters.text)
 async def slang(bot, message):
@@ -61,11 +59,10 @@ async def slang(bot, message):
             if word.lower() in slang_words:
                 isslang = True
                 await message.delete()
-                sentence = sentence.replace(word, f'||{word}||')
+                break
         if isslang:
             name = message.from_user.first_name
-            if SPOILER:
-                await message.reply_chat_action("typing")
-            await Bot.send_message(message.chat.id, f"Hai {name} jangan gcast.")
+            msgtxt = f"{name}, pesan Anda telah dihapus karena mengandung bahasa yang tidak pantas."
+            await message.reply(msgtxt)
 
 Bot.run()
