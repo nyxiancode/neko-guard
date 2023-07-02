@@ -1,9 +1,10 @@
-from pyrogram import Client, filters
+from pyrogram import Client,filters
 import requests
 import re
-import config
+import config 
 
 url = "https://api.safone.me/nsfw"
+SPOILER = config.SPOILER_MODE
 slangf = 'slang_words.txt'
 with open(slangf, 'r') as f:
     slang_words = set(line.strip().lower() for line in f)
@@ -15,17 +16,21 @@ Bot = Client(
     api_hash=config.API_HASH
 )
 
+#-----------------------------------------------------------------
+
 @Bot.on_message(filters.private & filters.command("start"))
 async def start(bot, update):
-    await update.reply("""Halo! Saya adalah bot Penjaga Grup Telegram. Saya hadir untuk membantu Anda menjaga grup Anda tetap bersih dan aman untuk semua orang. Berikut ini adalah fitur utama yang saya tawarkan:
+    await update.reply("""Hi there! I'm the Telegram Group Guardian bot. I'm here to help you keep your group clean and safe for everyone. Here are the main features I offer:
 
-• **Word Slagging:** Saya dapat mendeteksi dan menghapus pesan dengan bahasa yang tidak pantas di dalam grup Anda.
+• **Word Slagging:** I can detect and remove inappropriate language messages in your group. 
 
-• **Image Filtering:** Saya juga dapat secara otomatis mendeteksi dan menghapus gambar porno atau NSFW di dalam grup Anda.
+• **Image Filtering:** I can also automatically detect and remove pornographic or NSFW images in your group. 
 
-Untuk memulai, cukup tambahkan saya ke grup Telegram Anda dan jadikan saya admin.
+To get started, simply add me to your Telegram group and promote me to admin 
 
-Terima kasih telah menggunakan Telegram Group Guardian! Mari kita jaga agar grup Anda tetap aman dan tertib. Powered by @SayaNeko""")
+Thanks for using Telegram Group Guardian! Let's keep your group safe and respectful. Powered by @NACBOTS""")
+
+#-----------------------------------------------------------------
 
 @Bot.on_message(filters.group & filters.photo)
 async def image(bot, message):
@@ -41,11 +46,15 @@ async def image(bot, message):
         if nsfw:
             name = message.from_user.first_name
             await message.delete()
-            await message.reply_photo(x, caption=f"""**PERINGATAN ⚠️** (foto telanjang)
+            if SPOILER:
+                await message.reply_photo(x, caption=f"""**WARNING ⚠️** (nude photo)
 
-**{name}** telah mengirim foto telanjang
+ **{name}** sent a nude photo
 
-{porn}% pornografi""")
+{porn}% porn""", has_spoiler = True)
+
+
+#-----------------------------------------------------------------
 
 @Bot.on_message(filters.group & filters.text)
 async def slang(bot, message):
@@ -59,10 +68,16 @@ async def slang(bot, message):
             if word.lower() in slang_words:
                 isslang = True
                 await message.delete()
-                break
+                sentence = sentence.replace(word, f'||{word}||')
         if isslang:
             name = message.from_user.first_name
-            msgtxt = f"{name}, pesan Anda telah dihapus karena mengandung bahasa yang tidak pantas."
-            await message.reply(msgtxt)
+            msgtxt = f"""{name} your message has been deleted due to the presence of inappropriate language. Here is a censored version of your message:
+            
+{sentence}
+            """
+            if SPOILER:
+                await message.reply(msgtxt)
+
+#--------------------------------------------------------------------------------------------------
 
 Bot.run()
