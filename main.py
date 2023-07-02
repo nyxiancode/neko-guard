@@ -1,7 +1,7 @@
-from pyrogram import Client,filters
+from pyrogram import Client, filters
 import requests
 import re
-import config 
+import config
 
 url = "https://api.safone.me/nsfw"
 SPOILER = config.SPOILER_MODE
@@ -51,7 +51,7 @@ async def image(bot, message):
 
  **{name}** sent a nude photo
 
-{porn}% porn""", has_spoiler = True)
+{porn}% porn""", has_spoiler=True)
 
 
 #-----------------------------------------------------------------
@@ -67,11 +67,11 @@ async def slang(bot, message):
         for word in sent.split():
             if word.lower() in slang_words:
                 isslang = True
-                await message.delete()
                 sentence = sentence.replace(word, f'||{word}||')
         if isslang:
+            await message.delete()
             name = message.from_user.first_name
-            msgtxt = f"""{name} Pesanmu dah di apus,makanya jangan gcast ini pesan mu:
+            msgtxt = f"""{name} Pesanmu dah dihapus, makanya jangan gunakan kata kasar:
             
 {sentence}
             """
