@@ -16,21 +16,17 @@ Bot = Client(
     api_hash=config.API_HASH
 )
 
-#-----------------------------------------------------------------
-
 @Bot.on_message(filters.private & filters.command("start"))
 async def start(bot, update):
     await update.reply("""Hai, yang di sana! Saya adalah bot Penjaga Grup Telegram. Saya di sini untuk membantu Anda menjaga grup Anda tetap bersih dan aman untuk semua orang. Berikut adalah fitur utama yang saya tawarkan:
-
-• **Word Slagging:** Saya dapat mendeteksi dan menghapus pesan bahasa yang tidak pantas di grup Anda.
-
-• **Image Filtering:** Saya juga dapat secara otomatis mendeteksi dan menghapus gambar porno atau NSFW di grup Anda.
-
-Untuk memulai, cukup tambahkan saya ke grup Telegram Anda dan promosikan saya ke admin
-
-Terima kasih telah menggunakan Neko Guardian! Mari jaga grup Anda tetap aman dan terhormat. Powered by @SayaNeko""")
-
-#-----------------------------------------------------------------
+    
+    • **Word Slagging:** Saya dapat mendeteksi dan menghapus pesan bahasa yang tidak pantas di grup Anda.
+    
+    • **Image Filtering:** Saya juga dapat secara otomatis mendeteksi dan menghapus gambar porno atau NSFW di grup Anda.
+    
+    Untuk memulai, cukup tambahkan saya ke grup Telegram Anda dan promosikan saya ke admin
+    
+    Terima kasih telah menggunakan Neko Guardian! Mari jaga grup Anda tetap aman dan terhormat. Powered by @SayaNeko""")
 
 @Bot.on_message(filters.group & filters.photo)
 async def image(bot, message):
@@ -48,13 +44,10 @@ async def image(bot, message):
             await message.delete()
             if SPOILER:
                 await message.reply_photo(x, caption=f"""**WARNING ⚠️** (nude photo)
-
- **{name}** sent a nude photo
-
-{porn}% porn""", has_spoiler=True)
-
-
-#-----------------------------------------------------------------
+    
+    **{name}** sent a nude photo
+    
+    {porn}% porn""", has_spoiler=True)
 
 @Bot.on_message(filters.group & filters.text)
 async def slang(bot, message):
@@ -67,17 +60,12 @@ async def slang(bot, message):
         for word in sent.split():
             if word.lower() in slang_words:
                 isslang = True
+                await message.delete()
                 sentence = sentence.replace(word, f'||{word}||')
         if isslang:
-            await message.delete()
             name = message.from_user.first_name
-            msgtxt = f"""{name} Pesanmu dah dihapus, makanya jangan gunakan kata kasar:
-            
-{sentence}
-            """
             if SPOILER:
-                await message.reply(msgtxt)
-
-#--------------------------------------------------------------------------------------------------
+                await message.reply_chat_action("typing")
+            await Bot.send_message(message.chat.id, f"Hai {name} jangan gcast.")
 
 Bot.run()
